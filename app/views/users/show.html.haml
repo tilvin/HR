@@ -1,0 +1,44 @@
+%p#notice= notice
+%p
+  %b
+    = link_to 'Назад к списку соискателей',  users_path
+    \|
+    = link_to 'Изменить профиль соискателя', edit_user_path(@user)
+    \|
+    = link_to 'Добавить соискателя', new_user_path
+  %br
+
+.name
+  Соискатель
+  = @user.name
+%p
+  %b Ожидаемая заработная плата:
+  = @user.salary
+%p
+  %b Контактные данные:
+  = @user.contact
+%p
+  %b Ищу работу:
+  = @user.status
+
+%p
+  %b Умения:
+  - @user.skills.each do |sk|
+    .skill
+      = sk.name
+
+.choose
+  Полностью подходит вакансия:
+- Vacancy.with_actual_date.with_suitable_skills(@user.skill_ids).each do |v|
+  = '-'
+  = link_to v.name, v
+  = concur(v, @user)
+  %br
+
+.choose
+  Частично подходит вакансия:
+- (Vacancy.with_actual_date.joins(:skills).where(skills: { id: @user.skill_ids }).uniq - Vacancy.with_suitable_skills(@user.skill_ids) ).each do |v|
+  = '-'
+  = link_to v.name, v
+  = concur(v, @user)
+  %br

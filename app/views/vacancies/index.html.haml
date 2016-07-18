@@ -1,0 +1,26 @@
+
+%h1 Доступные вакансии
+
+%table.table.table-hover
+  %thead
+    %tr
+      %th Вакансия
+      %th Срок действия
+      %th Зарплата
+      %th Контактные данные
+      %th
+      %th
+
+  %tbody
+    - @vacancies.with_actual_date.order(salary: :desc).each do |vacancy|
+      %tr
+        %td= link_to vacancy.name, vacancy
+        %td= vacancy.date_until
+        %td= vacancy.salary
+        %td= vacancy.contact
+        %td= link_to 'Изменить', edit_vacancy_path(vacancy)
+        %td= link_to 'Удалить', vacancy, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to '+ Добавить вакансию', new_vacancy_path

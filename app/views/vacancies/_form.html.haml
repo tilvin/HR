@@ -1,0 +1,25 @@
+= form_for @vacancy do |f|
+  - if @vacancy.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@vacancy.errors.count, "error")} prohibited this vacancy from being saved:"
+      %ul
+        - @vacancy.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :'Название'
+    = f.text_field :name
+  .field
+    = f.label :'Действительна до'
+    = f.date_select :date_until
+  .field
+    = f.label :'Заработная плата'
+    = f.number_field :salary
+  .field
+    = f.label :'Контактные данные'
+    = f.text_field :contact
+  .skills
+    = render "shared/skills", f: f
+  .actions
+    = f.submit 'Сохранить', class: "btn btn-default"
+

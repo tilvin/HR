@@ -1,0 +1,11 @@
+%p
+  %b
+    = link_to 'Назад к списку вакансий',  vacancies_path
+    \|
+    = link_to 'Оставить без изменений', @vacancy
+  %br
+
+%h1 Редактирование вакансии
+
+= render 'form'
+

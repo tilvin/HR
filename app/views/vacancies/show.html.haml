@@ -1,0 +1,49 @@
+%p#notice= notice
+%p
+  %b
+    = link_to 'Назад к списку вакансий',  vacancies_path
+    \|
+    = link_to 'Изменить вакансию', edit_vacancy_path(@vacancy)
+    \|
+    = link_to 'Добавить вакансию', new_vacancy_path
+  %br
+
+.name
+  Вакансия:
+  = @vacancy.name
+%p
+  %b Дата создания:
+  = @vacancy.created_at.strftime(' %d.%m.%Y')
+%p
+  %b Вакансия дейсвительна до:
+  = @vacancy.date_until.strftime(' %d.%m.%Y') if @vacancy.date_until
+%p
+  %b Заработная плата:
+  = @vacancy.salary
+%p
+  %b Контактные данные:
+  = @vacancy.contact
+
+%p
+  %b Необходимые умения:
+  - @vacancy.skills.each do |skill|
+    .skill
+      = skill.name
+
+.choose
+  Полностью подходит соискатель:
+- User.with_suitable_skills(@vacancy.skill_ids).each do |u|
+  = '-'
+  = link_to u.name, user_path(u)
+  = concur(@vacancy, u)
+  %br
+
+.choose
+  Частично подходит соискатель:
+/ - (User.joins(:skills).where(skills: { id: @vacancy.skill_ids }).uniq - User.with_suitable_skills(@vacancy.skill_ids) ).each do |u|
+- User.with_not_fully_suitable_skills(@vacancy.skill_ids).each do |u|
+  = '-'
+  = link_to u.name, user_path(u)
+  = concur(@vacancy, u)
+  %br
+

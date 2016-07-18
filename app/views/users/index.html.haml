@@ -1,0 +1,24 @@
+%h1 Соискатели
+
+%table.table.table-hover
+  %thead
+    %tr
+      %th Имя
+      %th Зарплата
+      %th Контактные данные
+      %th
+      %th
+      %th
+
+  %tbody
+    - @users.order(:salary).each do |user|
+      %tr
+        %td= link_to user.name, user
+        %td= user.salary
+        %td= user.contact
+        %td= link_to 'Изменить', edit_user_path(user)
+        %td= link_to 'Удалить', user, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to '+ Добавить соискателя', new_user_path
